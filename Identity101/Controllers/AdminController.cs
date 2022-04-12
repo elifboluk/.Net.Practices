@@ -11,4 +11,5 @@ public class AdminController : Controller
     {
         return View();
     }
+    //deneme
 }
