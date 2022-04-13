@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Identity101.Controllers;
 
-[AllowAnonymous]
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -177,4 +176,124 @@ public class AccountController : Controller
     {
         return View();
     }
+
+
+    [HttpGet]
+    public IActionResult ResetPassword()
+    {
+        return View();
+    }
+    [HttpPost]
+    public async Task<ActionResult> ResetPassword(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            ViewBag.Message = "Mailinize şifre güncelleme yönergemiz gönderilmiştir.";
+        }
+        else
+        {
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new { userId = user.Id, code }, Request.Scheme);
+
+            var emailMessage = new MailModel()
+            {
+                To = new List<EmailModel>
+                {
+                    new EmailModel()
+                        { Adress = user.Email, Name = user.UserName }
+                },
+                Body =
+                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",
+                Subject = "Reset Password"
+            };
+            await _emailService.SendMailAsync(emailMessage);
+            ViewBag.Message = "Mailinize şifre güncelleme yönergemiz gönderilmiştir.";
+        }
+        return View();
+
+    }
+    [HttpGet]
+    public IActionResult ConfirmResetPassword(string userId, string code)
+    {
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+        {
+            return BadRequest("Hatalı İstek");
+        }
+        ViewBag.Code = code;
+        ViewBag.UserId = userId;
+        return View();
+
+    }
+    [HttpPost]
+    public async Task<IActionResult> ConfirmResetPassword(ResetPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            ModelState.AddModelError(string.Empty, "Kullanıcı Bulunamadı");
+            return View();
+        }
+        var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Code));
+        var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
+        if (result.Succeeded)
+        {
+            //email gönder
+            TempData["Message"] = "Şifre değişikliğiniz gerçekleştirilmiştir.";
+            return View();
+        }
+        else
+        {
+            var message = string.Join("<br/>", result.Errors.Select(x => x.Description));
+            TempData["Message"] = message;
+            return View();
+        }
+
+    }
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity!.Name);
+        var model = new UserProfileViewModel()
+        {
+            Email = user.Email,
+            Name = user.Name,
+            Surname = user.Surname,
+        };
+        return View(model);
+    }
+
+
+    [Authorize, HttpPost]
+  
+    public async Task<IActionResult> Profile(UserProfileViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity!.Name);
+        user.Name = model.Name;
+        user.Surname = model.Surname;
+        user.Email = model.Email;
+        //TODO:Eğer email değiştiyse kullanıcın rolünü pasife çekip tekrar akvitasyon maili gönder.
+
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            ViewBag.Message = "Güncelleme başarılı";
+        }
+        else
+        {
+            var message = string.Join("<br>", result.Errors.Select(x => x.Description));
+            ViewBag.Messsage = message;
+        }
+        return View(model);
+    }
+
 }

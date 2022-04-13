@@ -6,14 +6,14 @@ using Identity101.Models.Email;
 
 namespace Identity101.Services.Email;
 
-public class OutlookEmailService : IEmailService
+public class SmtpEmailServices : IEmailService
 {
     private readonly IConfiguration _configuration;
 
-    public OutlookEmailService(IConfiguration configuration)
+    public SmtpEmailServices(IConfiguration configuration)
     {
         _configuration = configuration;
-        this.EmailSettings = _configuration.GetSection("OutlookSettings").Get<EmailSettings>();
+        this.EmailSettings = _configuration.GetSection("GmailSettings").Get<EmailSettings>();
     }
     public EmailSettings EmailSettings { get; }
 
