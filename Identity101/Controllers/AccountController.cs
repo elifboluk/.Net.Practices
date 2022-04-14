@@ -33,6 +33,7 @@ public class AccountController : Controller
         CheckRoles();
     }
 
+
     private void CheckRoles()
     {
         foreach (var item in Roles.RoleList)
