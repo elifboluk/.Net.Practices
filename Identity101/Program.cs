@@ -27,7 +27,8 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
     options.User.RequireUniqueEmail = true;
 }).AddEntityFrameworkStores<MyContext>()
-    .AddDefaultTokenProviders(); ;
+    .AddDefaultTokenProviders();
+;
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -40,7 +41,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddTransient<IEmailService, SmtpEmailServices>();
+builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -50,6 +51,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
