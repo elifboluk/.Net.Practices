@@ -1,4 +1,9 @@
 ﻿
+
+
+@model UserProfileViewModel
+
+
 <div class="page-header">
     <h4 class="page-title">Edit Profile</h4>
     <ol class="breadcrumb">
@@ -19,8 +24,8 @@
                             <span class="avatar brround avatar-xl" style="background-image: url(assets/images/faces/male/16.jpeg)"></span>
                         </div>
                         <div class="col-12">
-                            <h4 class="mb-1 mt-2 ">Christopher</h4>
-                            <p class="mb-0">Adminor Administrator</p>
+                            <h4 class="mb-1 mt-2 ">Erhan Yükselen</h4>
+                            <p class="mb-0"> Admin </p>
                         </div>
                     </div>
                 </form>
@@ -137,7 +142,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label class="form-label">Username</label>
-                                                <input class="form-control" type="text" name="username" placeholder="johnny.s" value=" Christopher">
+                                                <input class="form-control" type="text" name="username" placeholder="@Model.Name" value=" Christopher">
                                             </div>
                                         </div>
                                     </div>
@@ -521,5 +526,5 @@
         </div>
     </div>
 </div>
-                        </div>
+</div>
 

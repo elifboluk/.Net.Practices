@@ -72,7 +72,11 @@ public class AccountController : Controller
             //Email gönderme - Aktivasyon
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new
+            {
+                userId = user.Id,
+                code = code
+            },
                 protocol: Request.Scheme);
 
             var email = new MailModel()
@@ -189,7 +193,11 @@ public class AccountController : Controller
         {
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new { userId = user.Id, code = code },
+            var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new
+            {
+                userId = user.Id,
+                code = code
+            },
                 protocol: Request.Scheme);
 
             var emailMessage = new MailModel()
@@ -288,7 +296,11 @@ public class AccountController : Controller
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new
+            {
+                userId = user.Id,
+                code = code
+            },
                 protocol: Request.Scheme);
 
             var emailMessage = new MailModel()
@@ -316,32 +328,6 @@ public class AccountController : Controller
             ViewBag.Message = message;
         }
 
-        return View(model);
-    }
-
-    [HttpGet]
-    public IActionResult ChangePassword()
-    {
-        return View();
-    }
-    [HttpPost]
-    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-    {
-        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity!.Name);
-
-        var result = await _userManager.ChangePasswordAsync(user, model.EskiPassword, model.NewPassword);
-
-
-
-        if (result.Succeeded)
-        {
-            ViewBag.Message = "Değiştirme Başarılı";
-        }
-        else
-        {
-            var message = string.Join("<br>", result.Errors.Select(x => x.Description));
-            ViewBag.Message = message;
-        }
         return View(model);
     }
 }
