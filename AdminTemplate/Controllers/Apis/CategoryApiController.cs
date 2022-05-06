@@ -25,11 +25,6 @@ namespace AdminTemplate.Controllers.Apis
         //encode-decode
         //veriyi çekemediysem sunucu hatası olmuştur
 
-        // CRUD - Create Read Update Delete
-        // [HttpGet] Read (SELECT)
-        // [HttpPost] Create (INSERT)
-        // [HttpPut] Update (UPDATE)
-        // [HttpDelete] Delete (DELETE)
         // Get isteklerinde nasıl bir data çekeceğimizi query string ile belirleriz.
         // Get ile data gönderemez. header bilgisi gönderebilir.
         // Post, put ve delete işlemlerinde data gönderebiliriz. header-body bilgisi gönderilebilir.
@@ -55,18 +50,17 @@ namespace AdminTemplate.Controllers.Apis
             {
                 model.CreatedUser = HttpContext.User.Identity!.Name;
                 _context.Categories.Add(model);
-                var result = _context.SaveChanges();
+                _context.SaveChanges();
                 return Ok(new
                 {
                     Success = true,
-                    Message = $"{model.Name} isimli kategori başarıyla eklendi."
+                    Message = $"{model.Name} isimli kategori başarıyla eklendi"
                 });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = $"Bir hata oluştu: {ex.Message}!" });
+                return BadRequest(new { Message = $"Bir hata oluştu: {ex.Message}" });
             }
         }
-
     }
 }
