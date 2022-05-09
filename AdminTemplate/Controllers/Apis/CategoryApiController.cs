@@ -1,4 +1,5 @@
-﻿using AdminTemplate.Data;
+﻿
+using AdminTemplate.Data;
 using AdminTemplate.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,6 @@ namespace AdminTemplate.Controllers.Apis
         // Get ile data gönderemez. header bilgisi gönderebilir.
         // Post, put ve delete işlemlerinde data gönderebiliriz. header-body bilgisi gönderilebilir.
         // Header = Query String
-
         [HttpGet]
         public IActionResult All()
         {

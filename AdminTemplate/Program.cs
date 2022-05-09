@@ -28,7 +28,6 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     options.User.RequireUniqueEmail = true;
 }).AddEntityFrameworkStores<MyContext>()
     .AddDefaultTokenProviders();
-;
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -49,9 +48,7 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
-
 });
-
 
 var app = builder.Build();
 
@@ -81,6 +78,5 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();
