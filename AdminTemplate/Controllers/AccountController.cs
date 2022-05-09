@@ -30,7 +30,6 @@ public class AccountController : Controller
         CheckRoles();
     }
 
-
     private void CheckRoles()
     {
         foreach (string item in Roles.RoleList)
@@ -130,9 +129,13 @@ public class AccountController : Controller
 
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string? returnUrl = null)
     {
-        return View();
+        var model = new LoginViewModel()
+        {
+            ReturnUrl = returnUrl
+        };
+        return View(model);
     }
 
     [HttpPost]
@@ -143,21 +146,25 @@ public class AccountController : Controller
             return View(model);
         }
 
-        var user = await _userManager.FindByNameAsync(model.UserName);
-
-        if (user == null)
-        {
-            ModelState.AddModelError(string.Empty, "User not found");
-            return View(model);
-        }
-
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
+        var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, true);
 
         if (result.Succeeded)
         {
-            HttpContext.Session.SetString("User", System.Text.Json.JsonSerializer.Serialize<ApplicationUser>(user));
+            var user = _userManager.FindByNameAsync(model.UserName).Result;
+            HttpContext.Session.SetString("User", System.Text.Json.JsonSerializer.Serialize(new
+            {
+                user.Name,
+                user.Surname,
+                user.Email
+            }));
 
-            return RedirectToAction("Profile", "Account");
+            //model.ReturnUrl = string.IsNullOrEmpty(model.ReturnUrl) ? "~/" : model.ReturnUrl;
+
+            //model.ReturnUrl = model.ReturnUrl ?? Url.Action("Index", "Home");
+
+            model.ReturnUrl ??= Url.Content("~/");
+
+            return LocalRedirect(model.ReturnUrl);
         }
         else if (result.IsLockedOut)
         {
@@ -344,7 +351,7 @@ public class AccountController : Controller
         user.Name = model.UserProfileVM.Name;
         user.Surname = model.UserProfileVM.Surname;
         user.Email = model.UserProfileVM.Email;
-        user.UserName = model.UserProfileVM.UserName;
+        //user.UserName = model.UserProfileVM.UserName;
 
         var result = await _userManager.UpdateAsync(user);
         if (result.Succeeded)
@@ -352,7 +359,12 @@ public class AccountController : Controller
             ViewBag.Message = "Your profile has been updated successfully";
             var userl = await _userManager.FindByNameAsync(user.UserName);
             await _signInManager.SignInAsync(userl, true);
-            HttpContext.Session.SetString("User", System.Text.Json.JsonSerializer.Serialize<ApplicationUser>(user));
+            HttpContext.Session.SetString("User", System.Text.Json.JsonSerializer.Serialize(new
+            {
+                user.Name,
+                user.Surname,
+                user.Email
+            }));
         }
         else
         {
