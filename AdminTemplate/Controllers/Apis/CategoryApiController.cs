@@ -1,5 +1,4 @@
-﻿
-using AdminTemplate.Data;
+﻿using AdminTemplate.Data;
 using AdminTemplate.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +15,17 @@ namespace AdminTemplate.Controllers.Apis
         {
             _context = context;
         }
-        //CRUD = Create, Read, Update, Delete
-        //[HttpGet] Read (SELECT)
-        //[HttpPost] Create (INSERT)
-        //[HttpPut] Update (UPDATE)
-        //[HttpDelete] Delete (DELETE)
-        //get ile data gönderilemez, header bilgisi gönderilir(querystring)
-        //post, put, delete işlemlerinde data gönderilir
-        //encode-decode
-        //veriyi çekemediysem sunucu hatası olmuştur
+        // CRUD = Create, Read, Update, Delete
+        // [HttpGet] Read (SELECT)
+        // [HttpPost] Create (INSERT)
+        // [HttpPut] Update (UPDATE)
+        // [HttpDelete] Delete (DELETE)
+        // Get ile data gönderilemez, header bilgisi gönderilir(querystring). Get isteklerinde nasıl bir data çekeceğimizi query string ile belirleriz.
+        // post, put, delete işlemlerinde data gönderilir
+        // encode-decode
+        // veriyi çekemediysem sunucu hatası olmuştur
 
-        // Get isteklerinde nasıl bir data çekeceğimizi query string ile belirleriz.
+         
         // Get ile data gönderemez. header bilgisi gönderebilir.
         // Post, put ve delete işlemlerinde data gönderebiliriz. header-body bilgisi gönderilebilir.
         // Header = Query String
