@@ -1,5 +1,7 @@
 ﻿using AdminTemplate.Data;
+using AdminTemplate.Dtos;
 using AdminTemplate.Models.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,32 +12,37 @@ namespace AdminTemplate.Controllers.Apis
     public class CategoryApiController : BaseApiController
     {
         private readonly MyContext _context;
+        private readonly IMapper _mapper;
 
-        public CategoryApiController(MyContext context)
+        public CategoryApiController(MyContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         // CRUD = Create, Read, Update, Delete
         // [HttpGet] Read (SELECT)
         // [HttpPost] Create (INSERT)
         // [HttpPut] Update (UPDATE)
         // [HttpDelete] Delete (DELETE)
-        // Get ile data gönderilemez, header bilgisi gönderilir(querystring). Get isteklerinde nasıl bir data çekeceğimizi query string ile belirleriz.
+        // Get ile data gönderilemez, header bilgisi gönderilir(querystring). Get isteklerinde nasıl bir data çekeceğimizi query string ile belirleriz. Get ile data gönderemez. header bilgisi gönderebilir.
+        // Post, put ve delete işlemlerinde data gönderebiliriz. he
         // post, put, delete işlemlerinde data gönderilir
         // encode-decode
-        // veriyi çekemediysem sunucu hatası olmuştur
-
-         
-        // Get ile data gönderemez. header bilgisi gönderebilir.
-        // Post, put ve delete işlemlerinde data gönderebiliriz. header-body bilgisi gönderilebilir.
+        // veriyi çekemediysem sunucu hatası olmuştur.
+        // header-body bilgisi gönderilebilir.
         // Header = Query String
+
 
         [HttpGet]
         public IActionResult All()
         {
             try
             {
-                return Ok(_context.Categories.ToList());
+                var data = _context.Categories
+                    .ToList()
+                    .Select(x => _mapper.Map<CategoryDto>(x))
+                    .ToList();
+                return Ok(data);
             }
             catch (Exception ex)
             {
@@ -44,12 +51,19 @@ namespace AdminTemplate.Controllers.Apis
         }
 
         [HttpPost]
-        public IActionResult Add(Category model)
+        public IActionResult Add(CategoryDto model)
         {
             try
             {
-                model.CreatedUser = HttpContext.User.Identity!.Name;
-                _context.Categories.Add(model);
+                var data = _mapper.Map<Category>(model);
+                //var data = new Category()
+                //{
+                //    Name = model.Name,
+                //    Description = model.Description,
+                //    CreatedUser = HttpContext.User.Identity!.Name
+                //};
+                data.CreatedUser = HttpContext.User.Identity!.Name;
+                _context.Categories.Add(data);
                 _context.SaveChanges();
                 return Ok(new
                 {
@@ -68,7 +82,19 @@ namespace AdminTemplate.Controllers.Apis
         {
             try
             {
-                return Ok(_context.Categories.Find(id));
+                var data = _context.Categories.Find(id);
+                if (data == null)
+                {
+                    return NotFound(new { Message = $"{id} numaralı kategori bulunamadı" });
+                }
+                var model = _mapper.Map<CategoryDto>(data);
+                //var model = new CategoryDto()
+                //{
+                //    Id = data.Id,
+                //    Description = data.Description,
+                //    Name = data.Name
+                //};
+                return Ok(model);
             }
             catch (Exception ex)
             {
@@ -77,7 +103,7 @@ namespace AdminTemplate.Controllers.Apis
         }
 
         [HttpPut]
-        public IActionResult Update(int id, Category model)
+        public IActionResult Update(int id, CategoryDto model)
         {
             try
             {
@@ -90,6 +116,7 @@ namespace AdminTemplate.Controllers.Apis
 
                 category.Name = model.Name;
                 category.Description = model.Description;
+                //category = _mapper.Map<Category>(model);
                 category.UpdatedUser = HttpContext.User.Identity!.Name;
                 category.UpdatedDate = DateTime.UtcNow;
                 _context.SaveChanges();

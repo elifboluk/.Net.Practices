@@ -95,7 +95,6 @@
             getProducts();
             $("#switch").on("change",
                 () => {
-                    console.log("değişti");
                     if ($("#switch").is(":checked")) {
                         getCategoryLookup();
                         $("#cardListProduct").attr("class", "col-md-6");
@@ -133,16 +132,19 @@
                         console.log(error);
                     });
                 });
-                
+
             $("#formUpdateProduct").on("submit",
                 (e) => {
+                    
                     e.preventDefault();
                     var data = {
-                        categoryId: $("#cmbCategory").val(),
+                        categoryId: $("#cmbUpdateCategory").val(),
                         name: $("#txtUpdateProductName").val(),
                         unitPrice: $("#txtUpdateUnitPrice").val(),
                         id: $("#txtUpdateProductId").val()
                     };
+                    console.log("offfffff",data);
+                    ;
                     $.ajax({
                         url: "../../api/productapi/update/"+data.id,
                         method: "PUT",
@@ -167,7 +169,8 @@
         const getProducts = () => {
             $.ajax({
                 url: "../../api/productapi/all",
-                method: "GET"
+                method: "GET",
+                async:false
             }).done(data => {
                 console.log(data);
                 addProductList(data);
@@ -179,9 +182,9 @@
         const getCategoryLookup = () => {
             $.ajax({
                 url: "../../api/categoryapi/all",
-                method: "GET"
+                method: "GET",
+                async: false
             }).done(data => {
-                console.log(data);
                 addCategoryLookup(data);
             }).fail(error => {
                 console.log(error);
@@ -191,7 +194,9 @@
         const addCategoryLookup = (categories) => {
             $("#cmbCategory").empty();
             $("#cmbUpdateCategory").empty();
+
             categories.forEach(category => {
+                console.log("foreach içi",category)
                 $("#cmbCategory").append(`<option value="${category.id}">${category.name}</option>`);
                 $("#cmbUpdateCategory").append(`<option value="${category.id}">${category.name}</option>`);
             });
@@ -199,6 +204,7 @@
 
         const addProductList = (products) => {
             $("#listProduct").empty();
+            console.log("sıkıntı var",products);
             products.forEach(product => {
                 const li = $(`<li class="list-group-item">${product.name} - ${product.unitPrice} - ${product.category.name}</li>`);
 
@@ -224,7 +230,6 @@
                                 console.log(error);
                                 //toast ile hata verilmeli
                             });
-
                     });
 
                 btnUpdate.on("click",
@@ -233,15 +238,17 @@
                         $("#cardListProduct").attr("class", "col-md-6");
                         $("#formUpdateProduct").trigger("reset");
                         $("#cardUpdateProduct").slideDown(750);
+                        console.log("burası önemli",product);
+
                         $.ajax({
                             url: "../../api/productapi/detail/" + product.id,
                             method: "GET"
                         }).done(data => {
                             console.log(data);
-                            $("#txtUpdateProductId").val(data.id);
-                            $("#txtUpdateUnitPrice").val(data.unitPrice);
-                            $("#txtUpdateProductName").val(data.name);
-                            $("#cmbUpdateCategory").val(data.categoryId);
+                            $("#txtUpdateProductId").val(product.id);
+                            $("#txtUpdateUnitPrice").val(product.unitPrice);
+                            $("#txtUpdateProductName").val(product.name);
+                            $("#cmbUpdateCategory").val(product.categoryId);
                         }).fail(error => {
                             console.log(error);
                         });
