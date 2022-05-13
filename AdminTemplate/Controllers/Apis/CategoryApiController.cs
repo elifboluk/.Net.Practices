@@ -1,4 +1,4 @@
-﻿using AdminTemplate.Data;
+﻿using AdminTemplate.BusinessLogic.Repository.Abstracts;
 using AdminTemplate.Dtos;
 using AdminTemplate.Models.Entities;
 using AutoMapper;
@@ -10,13 +10,13 @@ namespace AdminTemplate.Controllers.Apis
     [ApiController]
     public class CategoryApiController : BaseApiController
     {
-        private readonly MyContext _context;
         private readonly IMapper _mapper;
+        private readonly IRepository<Category, int> _categoryRepo;
 
-        public CategoryApiController(MyContext context, IMapper mapper)
+        public CategoryApiController(IMapper mapper, IRepository<Category, int> categoryRepo)
         {
-            _context = context;
             _mapper = mapper;
+            _categoryRepo = categoryRepo;
         }
         // CRUD = Create, Read, Update, Delete
         // [HttpGet] Read (SELECT)
@@ -36,11 +36,16 @@ namespace AdminTemplate.Controllers.Apis
         {
             try
             {
-                var data = _context.Categories
-                    //.Include(x => x.Products)
+                //var data = _context.Categories
+                //    //.Include(x => x.Products)
+                //    .ToList()
+                //    .Select(x => _mapper.Map<CategoryDto>(x))
+                //    .ToList();
+
+                var data = _categoryRepo.Get()
                     .ToList()
-                    .Select(x => _mapper.Map<CategoryDto>(x))
-                    .ToList();
+                    .Select(x => _mapper.Map<CategoryDto>(x));
+
                 return Ok(data);
             }
             catch (Exception ex)
@@ -62,8 +67,9 @@ namespace AdminTemplate.Controllers.Apis
                 //    CreatedUser = HttpContext.User.Identity!.Name
                 //};
                 data.CreatedUser = HttpContext.User.Identity!.Name;
-                _context.Categories.Add(data);
-                _context.SaveChanges();
+                //_context.Categories.Add(data);
+                //_context.SaveChanges();
+                _categoryRepo.Insert(data);
                 return Ok(new
                 {
                     Success = true,
@@ -81,7 +87,8 @@ namespace AdminTemplate.Controllers.Apis
         {
             try
             {
-                var data = _context.Categories.Find(id);
+                //var data = _context.Categories.Find(id);
+                var data = _categoryRepo.GetById(id);
                 if (data == null)
                 {
                     return NotFound(new { Message = $"{id} numaralı kategori bulunamadı" });
@@ -106,7 +113,8 @@ namespace AdminTemplate.Controllers.Apis
         {
             try
             {
-                var category = _context.Categories.Find(id);
+                //var category = _context.Categories.Find(id);
+                var category = _categoryRepo.GetById(id);
 
                 if (category == null)
                 {
@@ -117,7 +125,8 @@ namespace AdminTemplate.Controllers.Apis
                 //category = _mapper.Map<Category>(model);
                 category.UpdatedUser = HttpContext.User.Identity!.Name;
                 category.UpdatedDate = DateTime.UtcNow;
-                _context.SaveChanges();
+                //_context.SaveChanges();
+                _categoryRepo.Update(category);
                 return Ok(new
                 {
                     Success = true,
@@ -135,14 +144,17 @@ namespace AdminTemplate.Controllers.Apis
         {
             try
             {
-                var category = _context.Categories.Find(id);
+                //var category = _context.Categories.Find(id);
+                var category = _categoryRepo.GetById(id);
 
                 if (category == null)
                 {
                     return NotFound(new { Message = $"{id} numaralı kategori bulunamadı" });
                 }
-                _context.Categories.Remove(category);
-                _context.SaveChanges();
+                //_context.Categories.Remove(category);
+                //_context.SaveChanges();
+
+                _categoryRepo.Delete(category);
                 return Ok(new
                 {
                     Success = true,
