@@ -23,7 +23,7 @@ public sealed class MyContext : IdentityDbContext<ApplicationUser, ApplicationRo
             entity.Property(x => x.RegisterDate).HasColumnType("datetime");
         });
 
-        builder.Entity<ApplicationRole>(entity =>
+        builder.Entity<ApplicationRole>(entity => 
         {
             entity.Property(x => x.Description).HasMaxLength(120).IsRequired(false);
         });
