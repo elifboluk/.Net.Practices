@@ -5,42 +5,10 @@ namespace North.Data
 {
     public partial class NorthwindContext : DbContext
     {
-       
         public NorthwindContext(DbContextOptions<NorthwindContext> options)
             : base(options)
         {
         }
-
-        public virtual DbSet<AlphabeticalListOfProduct> AlphabeticalListOfProducts { get; set; } = null!;
-        public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<CategorySalesFor1997> CategorySalesFor1997s { get; set; } = null!;
-        public virtual DbSet<CurrentProductList> CurrentProductLists { get; set; } = null!;
-        public virtual DbSet<Customer> Customers { get; set; } = null!;
-        public virtual DbSet<CustomerAndSuppliersByCity> CustomerAndSuppliersByCities { get; set; } = null!;
-        public virtual DbSet<CustomerDemographic> CustomerDemographics { get; set; } = null!;
-        public virtual DbSet<Employee> Employees { get; set; } = null!;
-        public virtual DbSet<Invoice> Invoices { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
-        public virtual DbSet<OrderDetailsExtended> OrderDetailsExtendeds { get; set; } = null!;
-        public virtual DbSet<OrderSubtotal> OrderSubtotals { get; set; } = null!;
-        public virtual DbSet<OrdersQry> OrdersQries { get; set; } = null!;
-        public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<ProductSalesFor1997> ProductSalesFor1997s { get; set; } = null!;
-        public virtual DbSet<ProductsAboveAveragePrice> ProductsAboveAveragePrices { get; set; } = null!;
-        public virtual DbSet<ProductsByCategory> ProductsByCategories { get; set; } = null!;
-        public virtual DbSet<QuarterlyOrder> QuarterlyOrders { get; set; } = null!;
-        public virtual DbSet<Region> Regions { get; set; } = null!;
-        public virtual DbSet<SalesByCategory> SalesByCategories { get; set; } = null!;
-        public virtual DbSet<SalesTotalsByAmount> SalesTotalsByAmounts { get; set; } = null!;
-        public virtual DbSet<Shipper> Shippers { get; set; } = null!;
-        public virtual DbSet<SummaryOfSalesByQuarter> SummaryOfSalesByQuarters { get; set; } = null!;
-        public virtual DbSet<SummaryOfSalesByYear> SummaryOfSalesByYears { get; set; } = null!;
-        public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
-        public virtual DbSet<Territory> Territories { get; set; } = null!;
-
-        
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AlphabeticalListOfProduct>(entity =>
@@ -716,7 +684,33 @@ namespace North.Data
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        public virtual DbSet<AlphabeticalListOfProduct> AlphabeticalListOfProducts { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<CategorySalesFor1997> CategorySalesFor1997s { get; set; } = null!;
+        public virtual DbSet<CurrentProductList> CurrentProductLists { get; set; } = null!;
+        public virtual DbSet<Customer> Customers { get; set; } = null!;
+        public virtual DbSet<CustomerAndSuppliersByCity> CustomerAndSuppliersByCities { get; set; } = null!;
+        public virtual DbSet<CustomerDemographic> CustomerDemographics { get; set; } = null!;
+        public virtual DbSet<Employee> Employees { get; set; } = null!;
+        public virtual DbSet<Invoice> Invoices { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
+        public virtual DbSet<OrderDetailsExtended> OrderDetailsExtendeds { get; set; } = null!;
+        public virtual DbSet<OrderSubtotal> OrderSubtotals { get; set; } = null!;
+        public virtual DbSet<OrdersQry> OrdersQries { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<ProductSalesFor1997> ProductSalesFor1997s { get; set; } = null!;
+        public virtual DbSet<ProductsAboveAveragePrice> ProductsAboveAveragePrices { get; set; } = null!;
+        public virtual DbSet<ProductsByCategory> ProductsByCategories { get; set; } = null!;
+        public virtual DbSet<QuarterlyOrder> QuarterlyOrders { get; set; } = null!;
+        public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<SalesByCategory> SalesByCategories { get; set; } = null!;
+        public virtual DbSet<SalesTotalsByAmount> SalesTotalsByAmounts { get; set; } = null!;
+        public virtual DbSet<Shipper> Shippers { get; set; } = null!;
+        public virtual DbSet<SummaryOfSalesByQuarter> SummaryOfSalesByQuarters { get; set; } = null!;
+        public virtual DbSet<SummaryOfSalesByYear> SummaryOfSalesByYears { get; set; } = null!;
+        public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
+        public virtual DbSet<Territory> Territories { get; set; } = null!;
     }
 }
