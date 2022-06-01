@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-namespace North.Web.Models
+namespace North.Core.Entities
 {
     public partial class Order
     {
