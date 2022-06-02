@@ -1,8 +1,8 @@
-﻿using North.Businesss.Repositories.Abstracts.EntityFrameworkCore;
+﻿using North.Business.Repositories.Abstracts.EntityFrameworkCore;
 using North.Core.Entities;
 using North.Data;
 
-namespace North.Businesss.Repositories
+namespace North.Business.Repositories
 {
     public class CategoryRepo : RepositoryBase<Category, int>
     {

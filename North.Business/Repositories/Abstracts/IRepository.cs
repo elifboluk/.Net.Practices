@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace North.Businesss.Repositories.Abstracts
+namespace North.Business.Repositories.Abstracts
 {
     public interface IRepository<TEntity, TKey>
         where TKey : IEquatable<TKey>
@@ -8,7 +8,7 @@ namespace North.Businesss.Repositories.Abstracts
     {
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate = null);
         //Task<IQueryable<TEntity>> GetAsnyc(Expression<Func<TEntity, bool>> predicate = null);
-        TEntity GetById(TKey id);
+        TEntity? GetById(TKey id);
         int Insert(TEntity entity, bool isSaveLater = false);
         int Update(TEntity entity, bool isSaveLater = false);
         int Delete(TEntity entity, bool isSaveLater = false);

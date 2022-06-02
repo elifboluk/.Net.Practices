@@ -1,6 +1,6 @@
 ﻿using North.Core.Payments;
 
-namespace North.Businesss.Services.Payment
+namespace North.Business.Services.Payment
 {
     public interface IPaymentService
     {

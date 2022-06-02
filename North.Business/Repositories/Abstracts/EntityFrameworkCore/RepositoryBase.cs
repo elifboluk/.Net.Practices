@@ -2,7 +2,7 @@
 using North.Data;
 using System.Linq.Expressions;
 
-namespace North.Businesss.Repositories.Abstracts.EntityFrameworkCore
+namespace North.Business.Repositories.Abstracts.EntityFrameworkCore
 {
     public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
         where TKey : IEquatable<TKey>
@@ -20,7 +20,7 @@ namespace North.Businesss.Repositories.Abstracts.EntityFrameworkCore
         {
             return predicate == null ? _table : _table.Where(predicate);
         }
-        public virtual TEntity GetById(TKey id)
+        public virtual TEntity? GetById(TKey id)
         {
             return _table.Find(id);
         }

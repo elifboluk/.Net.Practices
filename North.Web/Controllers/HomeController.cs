@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using North.Web.Models;
 using System.Diagnostics;
-using North.Businesss.Repositories.Abstracts;
+using North.Business.Repositories.Abstracts;
 using North.Core.Entities;
 
 namespace North.Web.Controllers

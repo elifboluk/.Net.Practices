@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using MUsefulMethods;
 using North.Core.Payments;
 
-namespace North.Businesss.Services.Payment
+namespace North.Business.Services.Payment
 {
     public class IyzicoPaymentOptions : Options
     {
